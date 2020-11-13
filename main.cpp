@@ -1,6 +1,13 @@
 #include <iostream>
+#include <cstdlib>
+#include <string>
+#include "graph.h"
+
+using namespace std;
 
 int main() {
-    std::cout << "Hello, World!" << std::endl;
+
+    graph X = new graph;
+
     return 0;
 }

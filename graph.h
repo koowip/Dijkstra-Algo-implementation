@@ -8,7 +8,14 @@
 class graph
 {
 public:
-    int * array;
+    int vertex;
+    int nextVert;
+    int weight;
+    graph *next;
+
+    graph();
+    graph(int vertex, int nextVert, int edge);
+    void insert(graph * mainArray);
 };
 
 #endif //CSE310_PROJ3_GRAPH_H

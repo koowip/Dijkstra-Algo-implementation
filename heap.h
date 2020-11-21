@@ -16,5 +16,9 @@ public:
 
     MinHeap(int size);
     void insert(vertex k);
+    int parent(int i);
+    int leftChild(int i);
+    int rightChild(int i);
+    int isEmpty(MinHeap* que);
 };
 #endif //CSE310_PROJ3_HEAP_H

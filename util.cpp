@@ -72,3 +72,34 @@ vertex *initialize(vertex * vertHoldingArray, graph * adjList, int sourceVert, i
     //return vertex set pointer
     return vertHoldingArray;
 }
+
+void dijkstraAlgo(graph * adjList, int sourceVert, int numOfVertex)
+{
+
+    vertex *initializeSingleSourceSet;
+    initializeSingleSourceSet = initialize(initializeSingleSourceSet, adjList, sourceVert, numOfVertex);
+
+    vertex *shortestPathSet; //Set to hold shortest path
+
+    MinHeap *priorityQue = new MinHeap(numOfVertex); //PrioQue declaration
+    priorityQue = populatePriorityQue(priorityQue, initializeSingleSourceSet, numOfVertex);
+
+    for(int i = 0; i < numOfVertex; i++)
+    {
+        cout << priorityQue->minHeap[i].vertex << endl;
+        cout << priorityQue->minHeap[i].distance << endl;
+        cout << endl;
+    }
+
+
+}
+
+MinHeap * populatePriorityQue(MinHeap * priorityQue, vertex * initializeSingleSourceSet, int numOfVertex)
+{
+    for(int i = 1; i <= numOfVertex; i++)
+    {
+        priorityQue->insert(initializeSingleSourceSet[i]);
+    }
+
+    return priorityQue;
+}

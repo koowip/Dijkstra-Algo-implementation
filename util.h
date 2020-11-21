@@ -18,6 +18,8 @@
 graph* allocate(graph * mainArray, int * numOfVertex);
 graph* populate(graph * mainArray);
 vertex* initialize(vertex * vertHoldingArray, graph * adjList, int sourceVert, int numOfVertex);
+void dijkstraAlgo(graph * adjList, int sourceVert, int numOfVertex);
+MinHeap* populatePriorityQue(MinHeap * priorityQue, vertex * initializeSingleSourceSet, int numOfVertex);
 
 
 #endif //CSE310_PROJ3_UTIL_H

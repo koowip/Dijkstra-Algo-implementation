@@ -10,10 +10,14 @@
 #define CSE310_PROJ3_UTIL_H
 
 
-
-graph* allocate(graph * mainArray);
+/**
+ * Header file containing utility functions
+ * @param mainArray
+ * @return
+ */
+graph* allocate(graph * mainArray, int * numOfVertex);
 graph* populate(graph * mainArray);
-
+vertex* initialize(vertex * vertHoldingArray, graph * adjList, int sourceVert, int numOfVertex);
 
 
 #endif //CSE310_PROJ3_UTIL_H

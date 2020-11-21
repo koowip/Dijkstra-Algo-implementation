@@ -5,6 +5,9 @@
 #ifndef CSE310_PROJ3_GRAPH_H
 #define CSE310_PROJ3_GRAPH_H
 
+/**
+ * Graph class header file
+ */
 class graph
 {
 public:

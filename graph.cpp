@@ -7,8 +7,10 @@
 
 using namespace std;
 
-
-graph :: graph()
+/**
+ * Graph constructor with values set to NULL / 0
+ */
+graph::graph()
 {
     vertex = 0;
     nextVert = 0;
@@ -17,16 +19,27 @@ graph :: graph()
 
 }
 
-graph::graph(int vertex, int nextVert, int weight)
+/**
+ * Graph constructor with values given
+ * @param vertex1
+ * @param nextVert1
+ * @param weight1
+ */
+graph::graph(int vertex1, int nextVert1, int weight1)
 {
-    vertex = vertex;
-    nextVert = nextVert;
-    weight = weight;
+    this->vertex = vertex1;
+    this->nextVert = nextVert1;
+    this->weight = weight1;
     next = nullptr;
 }
 
+/**
+ * Fn to insert an item into the graph array using linked list representation
+ * @param mainArray
+ */
 void graph::insert(graph *mainArray)
 {
+    //All these values are used for inut from the txt file
     int currentVertexInt;
     int currentWeightInt;
     int currentNextVertInt;
@@ -34,6 +47,7 @@ void graph::insert(graph *mainArray)
     string currentWeight;
     string currentNextVert;
 
+    //All these getlines convert string values to ints
     getline(cin, currentVertex, ' ');
     currentVertexInt = stoi(currentVertex);
 
@@ -43,37 +57,33 @@ void graph::insert(graph *mainArray)
     getline(cin, currentWeight);
     currentWeightInt = stoi(currentWeight);
 
-    cout << currentVertexInt << ' ';
-    cout << currentNextVertInt << ' ';
-    cout << currentWeightInt << endl;
 
 
-    graph *newNode = new graph();
-    graph * temp;
+    graph *newNode = new graph(); //Heap allocating new graph obj
+    graph * temp; //Temp graph obj for use when iterating thru the linked list
 
+    //Assigning values from input to new graph obj
     newNode->vertex = currentVertexInt;
     newNode->nextVert = currentNextVertInt;
     newNode->weight = currentWeightInt;
 
-    cout << "newNode Vert: " << newNode->vertex << endl;
-    cout << "newNode nextVert: " << newNode->nextVert << endl;
-    cout << "newNode Weight: " << newNode->weight << endl;
 
-
+    //Logic to store graph obj of number (vertex) into the same number (vertex) of our
+    //graph array
     if(!mainArray[currentVertexInt].next)
     {
-        mainArray[currentVertexInt].next = newNode;
+        mainArray[currentVertexInt].next = newNode; //Obj becomes head of linked list
     }
     else
     {
-        temp = mainArray[currentVertexInt].next;
+        temp = mainArray[currentVertexInt].next; //Iterate thru list until you find an empty spot
 
         while(temp->next != nullptr)
         {
             temp = temp->next;
         }
 
-        temp->next = newNode;
+        temp->next = newNode; //obj is put at the first available empty spot
 
     }
 

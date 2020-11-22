@@ -15,7 +15,9 @@ public:
     int currentSize;
 
     MinHeap(int size);
-    void insert(vertex k);
+    void insert(vertex addIn);
+    void heapify(int post);
+    vertex* extractMin();
     int parent(int i);
     int leftChild(int i);
     int rightChild(int i);

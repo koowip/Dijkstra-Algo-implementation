@@ -73,24 +73,33 @@ vertex *initialize(vertex * vertHoldingArray, graph * adjList, int sourceVert, i
     return vertHoldingArray;
 }
 
+/**
+ * Algo that finds the shortest distance between a source and another node on the graph
+ * @param adjList
+ * @param sourceVert
+ * @param numOfVertex
+ */
 void dijkstraAlgo(graph * adjList, int sourceVert, int numOfVertex)
 {
-
+    //Make a set of vertex objs to be inserted into the minheap
     vertex *initializeSingleSourceSet;
     initializeSingleSourceSet = initialize(initializeSingleSourceSet, adjList, sourceVert, numOfVertex);
 
+
     vertex *shortestPathSet; //Set to hold shortest path
-
+    shortestPathSet = new vertex[numOfVertex]; //Allocate shortest path
+    int shortestPathCounter = 0;
     MinHeap *priorityQue = new MinHeap(numOfVertex); //PrioQue declaration
-    priorityQue = populatePriorityQue(priorityQue, initializeSingleSourceSet, numOfVertex);
+    priorityQue = populatePriorityQue(priorityQue, initializeSingleSourceSet, numOfVertex); //Insert the set of vertexes into the minheap
 
-    for(int i = 0; i < numOfVertex; i++)
+
+
+    while(priorityQue->currentSize != 0)
     {
-        cout << priorityQue->minHeap[i].vertex << endl;
-        cout << priorityQue->minHeap[i].distance << endl;
-        cout << endl;
-    }
+       shortestPathSet[shortestPathCounter] = *priorityQue->extractMin();
+       shortestPathCounter++;
 
+    }
 
 }
 

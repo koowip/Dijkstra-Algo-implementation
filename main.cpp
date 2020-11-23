@@ -22,7 +22,7 @@ int main() {
 
     vertex *b = new vertex;
     b->vertex = 1;
-    b->distance = 4;
+    b->distance = 12;
     vertex *c = new vertex;
     c->vertex = 2;
     c->distance = 7;
@@ -40,7 +40,7 @@ int main() {
     a->insert(*c);
     a->insert(*d);
     a->insert(*e);
-    a->insert(*f);
+    //a->insert(*f);
 
 
 
@@ -72,7 +72,7 @@ int main() {
         cout << "Distance: " << a->minHeap[i].distance << endl;
         cout << endl;
     }
-    */
+*/
 
 
 

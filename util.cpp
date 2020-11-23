@@ -92,13 +92,26 @@ void dijkstraAlgo(graph * adjList, int sourceVert, int numOfVertex)
     MinHeap *priorityQue = new MinHeap(numOfVertex); //PrioQue declaration
     priorityQue = populatePriorityQue(priorityQue, initializeSingleSourceSet, numOfVertex); //Insert the set of vertexes into the minheap
 
-
-
-    while(priorityQue->currentSize != 0)
+    //Code to test prio que is correct
+    for ( int i = 0; i < priorityQue->currentSize; i++)
     {
-       shortestPathSet[shortestPathCounter] = *priorityQue->extractMin();
-       shortestPathCounter++;
+        cout << "Index: " << priorityQue->minHeap[i].vertex << endl;
+        cout << "Distance: " << priorityQue->minHeap[i].distance << endl;
+    }
 
+    cout << endl;
+   // while(priorityQue->currentSize != 0)
+    //{
+       shortestPathSet[shortestPathCounter] = *priorityQue->extractMin();
+       //cout << shortestPathSet[shortestPathCounter].vertex << endl;
+       relax(adjList, &shortestPathSet[shortestPathCounter], priorityQue);
+       shortestPathCounter++;
+    //}
+
+    for ( int i = 0; i < priorityQue->currentSize; i++)
+    {
+        cout << "Index: " << priorityQue->minHeap[i].vertex << endl;
+        cout << "Distance: " << priorityQue->minHeap[i].distance << endl;
     }
 
 }
@@ -111,4 +124,34 @@ MinHeap * populatePriorityQue(MinHeap * priorityQue, vertex * initializeSingleSo
     }
 
     return priorityQue;
+}
+
+void relax(graph* adjList, vertex* source, MinHeap* priorityQue)
+{ //Can deal with island nodes in the graph here if necc
+
+    int edgeVertex;
+    int edgeWeight;
+
+    vertex* tempVertexObj;
+
+
+    graph* temp = &adjList[source->vertex];
+
+    while( temp->next != NULL)
+    {
+
+        edgeVertex = temp->next->nextVert;
+        edgeWeight =  temp->next->weight;
+
+
+        tempVertexObj = priorityQue->locate(edgeVertex);
+
+        if((edgeWeight + source->distance) < tempVertexObj->distance)
+        {
+            tempVertexObj->distance = edgeWeight + source->distance;
+            priorityQue->decreaseKey(edgeVertex, tempVertexObj->distance);
+        }
+        temp = temp->next;
+    }
+
 }

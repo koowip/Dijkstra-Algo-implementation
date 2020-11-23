@@ -86,6 +86,7 @@ vertex* MinHeap::extractMin()
     temp->distance = minHeap[0].distance;
     temp->predecessor = minHeap[0].predecessor;
 
+
     //change heap vertex element and decrease heap size
     minHeap[0] = minHeap[currentSize - 1];
     currentSize--;
@@ -94,6 +95,21 @@ vertex* MinHeap::extractMin()
     heapify(0);
 
     return temp;
+}
+
+void MinHeap::decreaseKey(int vertexSource, int newValue)
+{
+    int correctHeaIndex;
+
+    for(int i = 0; i < currentSize; i++)
+    {
+        if(this->minHeap[i].vertex == vertexSource)
+            correctHeaIndex = i;
+    }
+
+    minHeap[correctHeaIndex].distance = newValue;
+    heapify(parent(correctHeaIndex));
+
 }
 
 int MinHeap::parent(int i)
@@ -138,4 +154,28 @@ int MinHeap::isEmpty(MinHeap* que)
     {
         return 0;
     }
+}
+
+vertex* MinHeap::locate(int sourceVertex)
+{
+
+    int index = -1;
+
+    for( int i = 0; i <this->currentSize; i++)
+    {
+        if(this->minHeap[i].vertex == sourceVertex)
+        {
+            index = i;
+        }
+    }
+
+    if (index > -1)
+    {
+       return &minHeap[index];
+    }
+    else
+    {
+        return NULL;
+    }
+
 }

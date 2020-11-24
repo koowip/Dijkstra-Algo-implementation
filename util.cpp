@@ -20,7 +20,7 @@ graph *allocate(graph * mainArray, int * numOfVertex)
     getline(cin, numOfVertexString, ' '); //getting input
     *numOfVertex = stoi(numOfVertexString); //dereferenced and assigned int to how many vertex there are
 
-    mainArray = new graph[*numOfVertex]; //dynamic allocation to graph pointer
+    mainArray = new graph[*numOfVertex + 1]; //dynamic allocation to graph pointer
 
     return mainArray; //returning pointer
 }
@@ -56,15 +56,18 @@ graph *populate(graph * mainArray)
 vertex *initialize(vertex * vertHoldingArray, graph * adjList, int sourceVert, int numOfVertex)
 {
 
-    vertHoldingArray = new vertex[numOfVertex]; //dynamic allocation of vertex set
+    vertHoldingArray = new vertex[numOfVertex + 1]; //dynamic allocation of vertex set
 
+    int x;
     //setting all vertex to max distance and no predecessor
     for(int i = 1; i <= numOfVertex; i++)
     {
         vertHoldingArray[i].vertex = i;
         vertHoldingArray[i].distance = 500000000;
         vertHoldingArray[i].predecessor = NULL;
+
     }
+
 
     //setting source vertex to 0
     vertHoldingArray[sourceVert].distance = 0;
@@ -87,31 +90,40 @@ void dijkstraAlgo(graph * adjList, int sourceVert, int numOfVertex)
 
 
     vertex *shortestPathSet; //Set to hold shortest path
-    shortestPathSet = new vertex[numOfVertex]; //Allocate shortest path
-    int shortestPathCounter = 0;
+    shortestPathSet = new vertex[numOfVertex + 1]; //Allocate shortest path
+    int shortestPathCounter = 1;
     MinHeap *priorityQue = new MinHeap(numOfVertex); //PrioQue declaration
     priorityQue = populatePriorityQue(priorityQue, initializeSingleSourceSet, numOfVertex); //Insert the set of vertexes into the minheap
 
     //Code to test prio que is correct
-    for ( int i = 0; i < priorityQue->currentSize; i++)
+    /*for ( int i = 0; i < priorityQue->currentSize; i++)
     {
         cout << "Index: " << priorityQue->minHeap[i].vertex << endl;
         cout << "Distance: " << priorityQue->minHeap[i].distance << endl;
-    }
+    }*/
 
     cout << endl;
-   // while(priorityQue->currentSize != 0)
-    //{
-       shortestPathSet[shortestPathCounter] = *priorityQue->extractMin();
-       //cout << shortestPathSet[shortestPathCounter].vertex << endl;
-       relax(adjList, &shortestPathSet[shortestPathCounter], priorityQue);
-       shortestPathCounter++;
-    //}
 
-    for ( int i = 0; i < priorityQue->currentSize; i++)
+    while(priorityQue->currentSize != 0)
     {
-        cout << "Index: " << priorityQue->minHeap[i].vertex << endl;
-        cout << "Distance: " << priorityQue->minHeap[i].distance << endl;
+        shortestPathSet[shortestPathCounter] = *priorityQue->extractMin();
+        relax(adjList, &shortestPathSet[shortestPathCounter], priorityQue);
+
+        for ( int i = 0; i < priorityQue->currentSize; i++)
+        {
+            cout << "Index: " << priorityQue->minHeap[i].vertex << endl;
+            cout << "Distance: " << priorityQue->minHeap[i].distance << endl;
+            cout << endl;
+        }
+
+        shortestPathCounter++;
+    }
+
+
+    for ( int i = 1; i <= numOfVertex; i++)
+    {
+        cout << "Index:    " << shortestPathSet[i].vertex << endl;
+        cout << "Distance: " << shortestPathSet[i].distance << endl;
     }
 
 }
@@ -137,6 +149,8 @@ void relax(graph* adjList, vertex* source, MinHeap* priorityQue)
 
     graph* temp = &adjList[source->vertex];
 
+    cout << "SOURCE: " << source->vertex << endl;
+
     while( temp->next != NULL)
     {
 
@@ -146,8 +160,10 @@ void relax(graph* adjList, vertex* source, MinHeap* priorityQue)
 
         tempVertexObj = priorityQue->locate(edgeVertex);
 
-        if((edgeWeight + source->distance) < tempVertexObj->distance)
+        if(tempVertexObj != NULL && ((edgeWeight + source->distance) < tempVertexObj->distance))
         {
+            cout << edgeVertex << endl;
+
             tempVertexObj->distance = edgeWeight + source->distance;
             priorityQue->decreaseKey(edgeVertex, tempVertexObj->distance);
         }

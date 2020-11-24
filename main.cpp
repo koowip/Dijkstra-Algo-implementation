@@ -15,7 +15,7 @@ int main() {
     adjList = allocate(adjList, &numOfVertex); //util fn to allocate memory on the heap for graph pointer
     adjList = populate(adjList); //util fn that creates the adjlist from the graph input
 
-    dijkstraAlgo(adjList, 3, numOfVertex);
+    dijkstraAlgo(adjList, 23, numOfVertex);
 
     //This is all testing stuff
     /*MinHeap *a = new MinHeap(5);

@@ -99,16 +99,24 @@ vertex* MinHeap::extractMin()
 
 void MinHeap::decreaseKey(int vertexSource, int newValue)
 {
-    int correctHeaIndex;
+    int correctHeapIndex;
+
 
     for(int i = 0; i < currentSize; i++)
     {
+
         if(this->minHeap[i].vertex == vertexSource)
-            correctHeaIndex = i;
+            correctHeapIndex = i;
     }
 
-    minHeap[correctHeaIndex].distance = newValue;
-    heapify(parent(correctHeaIndex));
+    minHeap[correctHeapIndex].distance = newValue;
+
+    while(minHeap[parent(correctHeapIndex)].distance > minHeap[correctHeapIndex].distance)
+    {
+        swap(&minHeap[correctHeapIndex], &minHeap[parent(correctHeapIndex)]);
+        correctHeapIndex = parent(correctHeapIndex);
+    }
+    //heapify(parent(correctHeapIndex)); //parent(correctHeaIndex)
 
 }
 

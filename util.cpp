@@ -94,14 +94,6 @@ vertex* dijkstraAlgo(graph * adjList, int sourceVert, int numOfVertex)
     MinHeap *priorityQue = new MinHeap(numOfVertex); //PrioQue declaration
     priorityQue = populatePriorityQue(priorityQue, initializeSingleSourceSet, numOfVertex); //Insert the set of vertexes into the minheap
 
-    //Code to test prio que is correct
-    /*for ( int i = 0; i < priorityQue->currentSize; i++)
-    {
-        cout << "Index: " << priorityQue->minHeap[i].vertex << endl;
-        cout << "Distance: " << priorityQue->minHeap[i].distance << endl;
-    }*/
-
-    cout << endl;
 
     while(priorityQue->currentSize != 0)
     {
@@ -110,12 +102,6 @@ vertex* dijkstraAlgo(graph * adjList, int sourceVert, int numOfVertex)
         shortestPathCounter++;
     }
 
-
-    /*for ( int i = 1; i <= numOfVertex; i++)
-    {
-        cout << "Index:    " << shortestPathSet[i].vertex << endl;
-        cout << "Distance: " << shortestPathSet[i].distance << endl;
-    }*/
 
     delete[] priorityQue;
     return shortestPathSet;
@@ -172,26 +158,23 @@ void queryHandler(graph* adjList, int numOfVertex, int numOfEdges)
     string findQueryNum3;
     int findQueryAr[3];
 
+
     while(!sentinel)
     {
         getline(cin, query);
 
 
-        if(query[0] == 'w')
+        if(query[0] == 'w' || query[0] == 'W')
         {
             printGraph(adjList, numOfVertex, numOfEdges);
         }
-        if(query[0] == 'f')
+        if(query[0] == 'f' || query[0] == 'F')
         {
             queryHelper = query.substr(5);
-            //cout << queryHelper << endl;
             findQueryNum1 = queryHelper.substr(0,queryHelper.find(' '));
-            //cout << findQueryNum1 << endl;
             findQueryNum2 = queryHelper.substr(findQueryNum1.length() + 1);
             findQueryNum2 = findQueryNum2.substr(0, findQueryNum2.find(' '));
-            //cout << findQueryNum2 << endl;
             findQueryNum3 = queryHelper.substr(queryHelper.find_last_of(' ') + 1);
-            //cout << findQueryNum3 << endl;
 
             if(stoi(findQueryNum1) < 1)
             {
@@ -201,10 +184,10 @@ void queryHandler(graph* adjList, int numOfVertex, int numOfEdges)
 
                 if(stoi(findQueryNum3) < 0 || stoi(findQueryNum3) > 1)
                 {
-                    cout << "Error: invalid flag value";
+                    cout << "Error: invalid flag value" << endl;
                 }
             }
-            else if(stoi(findQueryNum2) < 1)
+            else if(stoi(findQueryNum2) < 1 || stoi(findQueryNum2) > numOfVertex)
             {
                 printf("Command: find %d %d %d", stoi(findQueryNum1), stoi(findQueryNum2), stoi(findQueryNum3));
                 cout << endl;
@@ -212,7 +195,7 @@ void queryHandler(graph* adjList, int numOfVertex, int numOfEdges)
 
                 if(stoi(findQueryNum3) < 0 || stoi(findQueryNum3) > 1)
                 {
-                    cout << "Error: invalid flag value";
+                    cout << "Error: invalid flag value" << endl;
                 }
             }
             else if(stoi(findQueryNum3) < 0 || stoi(findQueryNum3) > 1)
@@ -236,8 +219,6 @@ void queryHandler(graph* adjList, int numOfVertex, int numOfEdges)
             sentinel = 1;
         }
     }
-
-
 }
 
 void printGraph(graph* adjList, int numOfVertex, int numOfEdges)
@@ -291,12 +272,20 @@ void findQuery(graph * adjList, int findQueryAr[], int numOfVertex)
 
     if (findQueryAr[2])
     {
-        printf("Length: %d", finalSet[targetSpotInFinalSet].distance);
-        cout << endl;
+        if(finalSet[targetSpotInFinalSet].distance == 500000000)
+        {
+            printf("Error: node %d not reachable from node %d", findQueryAr[1], findQueryAr[0]);
+            cout << endl;
+        }
+        else
+        {
+            printf("Length: %d", finalSet[targetSpotInFinalSet].distance);
+            cout << endl;
+        }
+
     }
     else
     {
-        cout << "Path: ";
 
         vertex* temp = &finalSet[targetSpotInFinalSet];
 
@@ -307,18 +296,29 @@ void findQuery(graph * adjList, int findQueryAr[], int numOfVertex)
             counter++;
         }
 
-
-        for(int i = counter - 1; i >= 0; i--)
+        if(finalSet[targetSpotInFinalSet].distance == 500000000)
         {
-            cout << pathAr[i];
+            printf("Error: node %d not reachable from node %d", findQueryAr[1], findQueryAr[0]);
+            cout << endl;
+        }
+        else
+        {
+            cout << "Path: ";
 
-            if(i != 0)
+            for(int i = counter - 1; i >= 0; i--)
             {
-                cout << ";";
+                cout << pathAr[i];
+
+                if(i != 0)
+                {
+                    cout << ";";
+                }
             }
+
+            cout << endl;
+
         }
 
-        cout << endl;
     }
 
 }

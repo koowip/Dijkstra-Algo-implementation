@@ -1,7 +1,4 @@
-#include <iostream>
-#include <cstdlib>
-#include <string>
-#include "util.h"
+#include "main.h"
 
 using namespace std;
 

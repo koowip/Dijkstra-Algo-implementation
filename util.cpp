@@ -30,14 +30,13 @@ graph *allocate(graph * mainArray, int * numOfVertex)
  * @param mainArray takes in the graph array pointer
  * @return
  */
-graph *populate(graph * mainArray)
+graph *populate(graph * mainArray, int * numOfEdges)
 {
     string edgeCount; //string to hold value fro input
-    int edgeCountInt; //int to hold converted string input
     getline(cin, edgeCount); //getting input
-    edgeCountInt = stoi(edgeCount); //converting to int, value to be used as upper bound for loop
+    *numOfEdges = stoi(edgeCount); //converting to int, value to be used as upper bound for loop
 
-    for(int i = 0; i < edgeCountInt; i++)
+    for(int i = 0; i < *numOfEdges; i++)
     {
         mainArray->insert(mainArray); //calling insert fn on graph pointer obj
     }
@@ -108,14 +107,6 @@ void dijkstraAlgo(graph * adjList, int sourceVert, int numOfVertex)
     {
         shortestPathSet[shortestPathCounter] = *priorityQue->extractMin();
         relax(adjList, &shortestPathSet[shortestPathCounter], priorityQue);
-
-        for ( int i = 0; i < priorityQue->currentSize; i++)
-        {
-            cout << "Index: " << priorityQue->minHeap[i].vertex << endl;
-            cout << "Distance: " << priorityQue->minHeap[i].distance << endl;
-            cout << endl;
-        }
-
         shortestPathCounter++;
     }
 
@@ -139,17 +130,14 @@ MinHeap * populatePriorityQue(MinHeap * priorityQue, vertex * initializeSingleSo
 }
 
 void relax(graph* adjList, vertex* source, MinHeap* priorityQue)
-{ //Can deal with island nodes in the graph here if necc
+{
 
     int edgeVertex;
     int edgeWeight;
 
     vertex* tempVertexObj;
 
-
     graph* temp = &adjList[source->vertex];
-
-    cout << "SOURCE: " << source->vertex << endl;
 
     while( temp->next != NULL)
     {
@@ -162,12 +150,96 @@ void relax(graph* adjList, vertex* source, MinHeap* priorityQue)
 
         if(tempVertexObj != NULL && ((edgeWeight + source->distance) < tempVertexObj->distance))
         {
-            cout << edgeVertex << endl;
-
             tempVertexObj->distance = edgeWeight + source->distance;
+            tempVertexObj->predecessor = source;
             priorityQue->decreaseKey(edgeVertex, tempVertexObj->distance);
         }
         temp = temp->next;
     }
+
+}
+
+void queryHandler(graph* adjList, int numOfVertex, int numOfEdges)
+{
+    string query;
+    string queryHelper;
+    string findQueryNum1;
+    string findQueryNum2;
+    string findQueryNum3;
+    int findQueryAr[3];
+    getline(cin, query);
+
+    if(query[0] == 'w')
+    {
+        printGraph(adjList, numOfVertex, numOfEdges);
+    }
+    if(query[0] == 'f')
+    {
+        queryHelper = query.substr(5);
+        //cout << queryHelper << endl;
+        findQueryNum1 = queryHelper.substr(0,queryHelper.find(' '));
+        //cout << findQueryNum1 << endl;
+        findQueryNum2 = queryHelper.substr(findQueryNum1.length() + 1);
+        findQueryNum2 = findQueryNum2.substr(0, findQueryNum2.find(' '));
+        //cout << findQueryNum2 << endl;
+        findQueryNum3 = queryHelper.substr(queryHelper.find_last_of(' ') + 1);
+        //cout << findQueryNum3 << endl;
+
+        if(stoi(findQueryNum1) < 1)
+        {
+            cout << "Error: one or more invalid nodes" << endl;
+        }
+        else if(stoi(findQueryNum2) < 1)
+        {
+            cout << "Error: one or more invalid nodes" << endl;
+        }
+        else if(stoi(findQueryNum3) < 0 || stoi(findQueryNum3) > 1)
+        {
+            cout << "Error: invalid flag value" << endl;
+        }
+        else
+        {
+            findQueryAr[0] = stoi(findQueryNum1);
+            findQueryAr[1] = stoi(findQueryNum2);
+            findQueryAr[2] = stoi(findQueryNum3);
+            findQuery(adjList, findQueryAr, numOfVertex);
+        }
+    }
+
+}
+
+void printGraph(graph* adjList, int numOfVertex, int numOfEdges)
+{
+    int adjVertex;
+    int adjWeight;
+    graph* temp;
+
+    cout << "Command: write" << endl;
+    cout << numOfVertex << " " << numOfEdges << endl;
+
+    for(int i = 1; i <= numOfVertex; i++)
+    {
+        cout << i << " : ";
+
+        temp = adjList[i].next;
+
+        while(temp != NULL)
+        {
+            printf("(%d; %d)", temp->nextVert, temp->weight);
+            temp = temp->next;
+
+            if(temp != NULL)
+            {
+                cout << "; ";
+            }
+        }
+        cout << endl;
+    }
+
+}
+
+void findQuery(graph * adjList, int findQueryAr[], int numOfVertex)
+{
+
 
 }

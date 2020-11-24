@@ -20,7 +20,7 @@ using namespace std;
 graph* allocate(graph * mainArray, int * numOfVertex);
 graph* populate(graph * mainArray, int * munOfEdges);
 vertex* initialize(vertex * vertHoldingArray, graph * adjList, int sourceVert, int numOfVertex);
-void dijkstraAlgo(graph * adjList, int sourceVert, int numOfVertex);
+vertex* dijkstraAlgo(graph * adjList, int sourceVert, int numOfVertex);
 MinHeap* populatePriorityQue(MinHeap * priorityQue, vertex * initializeSingleSourceSet, int numOfVertex);
 void relax(graph* adjList, vertex* source, MinHeap* priorityQue);
 void queryHandler(graph* adjList, int numOfVertex, int numOfEdges);

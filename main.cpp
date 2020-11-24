@@ -18,8 +18,6 @@ int main() {
 
     queryHandler(adjList, numOfVertex, numOfEdges);
 
-   // dijkstraAlgo(adjList, 18, numOfVertex);
-
 
 
     return 0;

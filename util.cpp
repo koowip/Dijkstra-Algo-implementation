@@ -81,7 +81,7 @@ vertex *initialize(vertex * vertHoldingArray, graph * adjList, int sourceVert, i
  * @param sourceVert
  * @param numOfVertex
  */
-void dijkstraAlgo(graph * adjList, int sourceVert, int numOfVertex)
+vertex* dijkstraAlgo(graph * adjList, int sourceVert, int numOfVertex)
 {
     //Make a set of vertex objs to be inserted into the minheap
     vertex *initializeSingleSourceSet;
@@ -111,11 +111,14 @@ void dijkstraAlgo(graph * adjList, int sourceVert, int numOfVertex)
     }
 
 
-    for ( int i = 1; i <= numOfVertex; i++)
+    /*for ( int i = 1; i <= numOfVertex; i++)
     {
         cout << "Index:    " << shortestPathSet[i].vertex << endl;
         cout << "Distance: " << shortestPathSet[i].distance << endl;
-    }
+    }*/
+
+    delete[] priorityQue;
+    return shortestPathSet;
 
 }
 
@@ -161,50 +164,79 @@ void relax(graph* adjList, vertex* source, MinHeap* priorityQue)
 
 void queryHandler(graph* adjList, int numOfVertex, int numOfEdges)
 {
+    int sentinel = 0;
     string query;
     string queryHelper;
     string findQueryNum1;
     string findQueryNum2;
     string findQueryNum3;
     int findQueryAr[3];
-    getline(cin, query);
 
-    if(query[0] == 'w')
+    while(!sentinel)
     {
-        printGraph(adjList, numOfVertex, numOfEdges);
-    }
-    if(query[0] == 'f')
-    {
-        queryHelper = query.substr(5);
-        //cout << queryHelper << endl;
-        findQueryNum1 = queryHelper.substr(0,queryHelper.find(' '));
-        //cout << findQueryNum1 << endl;
-        findQueryNum2 = queryHelper.substr(findQueryNum1.length() + 1);
-        findQueryNum2 = findQueryNum2.substr(0, findQueryNum2.find(' '));
-        //cout << findQueryNum2 << endl;
-        findQueryNum3 = queryHelper.substr(queryHelper.find_last_of(' ') + 1);
-        //cout << findQueryNum3 << endl;
+        getline(cin, query);
 
-        if(stoi(findQueryNum1) < 1)
+
+        if(query[0] == 'w')
         {
-            cout << "Error: one or more invalid nodes" << endl;
+            printGraph(adjList, numOfVertex, numOfEdges);
         }
-        else if(stoi(findQueryNum2) < 1)
+        if(query[0] == 'f')
         {
-            cout << "Error: one or more invalid nodes" << endl;
+            queryHelper = query.substr(5);
+            //cout << queryHelper << endl;
+            findQueryNum1 = queryHelper.substr(0,queryHelper.find(' '));
+            //cout << findQueryNum1 << endl;
+            findQueryNum2 = queryHelper.substr(findQueryNum1.length() + 1);
+            findQueryNum2 = findQueryNum2.substr(0, findQueryNum2.find(' '));
+            //cout << findQueryNum2 << endl;
+            findQueryNum3 = queryHelper.substr(queryHelper.find_last_of(' ') + 1);
+            //cout << findQueryNum3 << endl;
+
+            if(stoi(findQueryNum1) < 1)
+            {
+                printf("Command: find %d %d %d", stoi(findQueryNum1), stoi(findQueryNum2), stoi(findQueryNum3));
+                cout << endl;
+                cout << "Error: one or more invalid nodes" << endl;
+
+                if(stoi(findQueryNum3) < 0 || stoi(findQueryNum3) > 1)
+                {
+                    cout << "Error: invalid flag value";
+                }
+            }
+            else if(stoi(findQueryNum2) < 1)
+            {
+                printf("Command: find %d %d %d", stoi(findQueryNum1), stoi(findQueryNum2), stoi(findQueryNum3));
+                cout << endl;
+                cout << "Error: one or more invalid nodes" << endl;
+
+                if(stoi(findQueryNum3) < 0 || stoi(findQueryNum3) > 1)
+                {
+                    cout << "Error: invalid flag value";
+                }
+            }
+            else if(stoi(findQueryNum3) < 0 || stoi(findQueryNum3) > 1)
+            {
+                printf("Command: find %d %d %d", stoi(findQueryNum1), stoi(findQueryNum2), stoi(findQueryNum3));
+                cout << endl;
+                cout << "Error: invalid flag value" << endl;
+            }
+            else
+            {
+                findQueryAr[0] = stoi(findQueryNum1);
+                findQueryAr[1] = stoi(findQueryNum2);
+                findQueryAr[2] = stoi(findQueryNum3);
+                findQuery(adjList, findQueryAr, numOfVertex);
+            }
         }
-        else if(stoi(findQueryNum3) < 0 || stoi(findQueryNum3) > 1)
+        if(query[0] == 's')
         {
-            cout << "Error: invalid flag value" << endl;
-        }
-        else
-        {
-            findQueryAr[0] = stoi(findQueryNum1);
-            findQueryAr[1] = stoi(findQueryNum2);
-            findQueryAr[2] = stoi(findQueryNum3);
-            findQuery(adjList, findQueryAr, numOfVertex);
+            cout << "Command: stop" << endl;
+            delete[] adjList;
+            sentinel = 1;
         }
     }
+
 
 }
 
@@ -240,6 +272,53 @@ void printGraph(graph* adjList, int numOfVertex, int numOfEdges)
 
 void findQuery(graph * adjList, int findQueryAr[], int numOfVertex)
 {
+    vertex * finalSet;
+    int targetSpotInFinalSet;
+    int  pathAr[numOfVertex];
+    int counter = 0;
+    finalSet = dijkstraAlgo(adjList, findQueryAr[0], numOfVertex);
 
+    printf("Command: find %d %d %d", findQueryAr[0], findQueryAr[1],findQueryAr[2]);
+    cout << endl;
+
+    for(int i = 1; i <= numOfVertex; i++)
+    {
+        if(finalSet[i].vertex == findQueryAr[1])
+        {
+            targetSpotInFinalSet = i;
+        }
+    }
+
+    if (findQueryAr[2])
+    {
+        printf("Length: %d", finalSet[targetSpotInFinalSet].distance);
+        cout << endl;
+    }
+    else
+    {
+        cout << "Path: ";
+
+        vertex* temp = &finalSet[targetSpotInFinalSet];
+
+        while(temp != NULL)
+        {
+            pathAr[counter] = temp->vertex;
+            temp = temp->predecessor;
+            counter++;
+        }
+
+
+        for(int i = counter - 1; i >= 0; i--)
+        {
+            cout << pathAr[i];
+
+            if(i != 0)
+            {
+                cout << ";";
+            }
+        }
+
+        cout << endl;
+    }
 
 }

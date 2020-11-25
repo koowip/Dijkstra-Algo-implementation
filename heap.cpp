@@ -97,27 +97,31 @@ vertex* MinHeap::extractMin()
     return temp;
 }
 
+/**
+ * Function to decrease vertex obj value and maintain minheap property
+ * @param vertexSource
+ * @param newValue
+ */
 void MinHeap::decreaseKey(int vertexSource, int newValue)
 {
     int correctHeapIndex;
 
-
     for(int i = 0; i < currentSize; i++)
     {
-
+        //Get the index in heap array of vertex
         if(this->minHeap[i].vertex == vertexSource)
             correctHeapIndex = i;
     }
 
+    //Change value to new value
     minHeap[correctHeapIndex].distance = newValue;
 
+    //iterate thru the heap and change with parents if minheap property is broken
     while(minHeap[parent(correctHeapIndex)].distance > minHeap[correctHeapIndex].distance)
     {
         swap(&minHeap[correctHeapIndex], &minHeap[parent(correctHeapIndex)]);
         correctHeapIndex = parent(correctHeapIndex);
     }
-    //heapify(parent(correctHeapIndex)); //parent(correctHeaIndex)
-
 }
 
 int MinHeap::parent(int i)
@@ -164,9 +168,15 @@ int MinHeap::isEmpty(MinHeap* que)
     }
 }
 
+/**
+ * Functino to locate and return a vertex obj address
+ * @param sourceVertex
+ * @return
+ */
 vertex* MinHeap::locate(int sourceVertex)
 {
 
+    //If no obj found return NULL, else return obj address
     int index = -1;
 
     for( int i = 0; i <this->currentSize; i++)

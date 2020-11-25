@@ -68,8 +68,6 @@ void graph::insert(graph *mainArray)
     newNode->weight = currentWeightInt;
 
 
-    //Logic to store graph obj of number (vertex) into the same number (vertex) of our
-    //graph array
     if(!mainArray[currentVertexInt].next)
     {
         mainArray[currentVertexInt].next = newNode; //Obj becomes head of linked list
@@ -78,14 +76,6 @@ void graph::insert(graph *mainArray)
     {
         newNode->next = mainArray[currentVertexInt].next; //Setting current head to new nodes next
         mainArray[currentVertexInt].next = newNode; //Setting head address to new node
-
-        //TO BE DELETED IF NOTHING BREAKS
-        /*temp = mainArray[currentVertexInt].next; //Iterate thru list until you find an empty spot
-        while(temp->next != nullptr)
-        {
-            temp = temp->next;
-        }
-        temp->next = newNode; //obj is put at the first available empty spot */
 
     }
 
